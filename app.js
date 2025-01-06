@@ -17,6 +17,11 @@ const xss = require('xss-clean');
 const cors = require('cors');
 const mongoSanitize = require('express-mongo-sanitize');
 
+//swagger
+const swaggerUI = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
+
 //other packages
 const morgan = require('morgan')
 
@@ -42,19 +47,20 @@ app.use(cors());
 app.use(xss());
 app.use(mongoSanitize());
 
+app.get('/', (req, res) => {
+    res.send('<h1>Custom Confy Store API</h1><a href="/api-docs">Documentation</a>');
+  });
+  app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 //middlewares - error handlers and 404 not found 
 const notFoundMiddleware = require('./middleware/not-found')
 const errorHandlerMiddleware = require('./middleware/error-handler')
 
 //routes
-app.get('/', (req, res) => {
-    res.send('e-commerce api')
-})
-app.get('/api/v1', (req, res) => {
-    console.log('token:', req.cookies)
-    res.send('e-commerce api')
-})
+// app.get('/api/v1', (req, res) => {
+//     console.log('token:', req.cookies)
+//     res.send('e-commerce api')
+// })
 app.use('/api/v1/auth',authRouter)
 app.use('/api/v1/users', userRouter)
 app.use('/api/v1/products', productRouter)
