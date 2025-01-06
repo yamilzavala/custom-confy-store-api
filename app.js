@@ -38,7 +38,7 @@ app.use(fileUpload());
 app.set('trust proxy', 1);
 app.use(
   rateLimiter({
-    windowMs: 60 * 60 * 1000,
+    windowMs: 5 * 60 * 1000,
     max: 1000,
   })
 );
@@ -57,10 +57,10 @@ const notFoundMiddleware = require('./middleware/not-found')
 const errorHandlerMiddleware = require('./middleware/error-handler')
 
 //routes
-// app.get('/api/v1', (req, res) => {
-//     console.log('token:', req.cookies)
-//     res.send('e-commerce api')
-// })
+app.get('/api/v1', (req, res) => {
+    console.log('token:', req.cookies)
+    res.send('e-commerce api')
+})
 app.use('/api/v1/auth',authRouter)
 app.use('/api/v1/users', userRouter)
 app.use('/api/v1/products', productRouter)
